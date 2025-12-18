@@ -1,65 +1,62 @@
-import Image from "next/image";
+"use client";
+
+import { useRef } from "react";
+import Overlay from "./components/Overlay";
+import CanvasScene from "./components/CanvasScene";
+import ScrollProvider from "./components/ScrollProvider";
+import Navbar from "./components/Navbar";
+import HeroSection from "./components/HeroSection";
+import Section2 from "./components/Section2";
+import Section3 from "./components/Section3";
+import Section4 from "./components/Section4";
+import Section5 from "./components/Section5";
+
+const linkColors = ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"];
+const sectionGradients = [
+  "linear-gradient(-135deg, #C2D1D8 0%, #3D6C82 100%)",
+  "linear-gradient(-135deg, #D0EFF7 0%, #2A6B80 100%)",
+  "linear-gradient(-135deg, #9CC1D0 0%, #354D60 100%)",
+  "linear-gradient(-135deg, #E7F0F8 0%, #4A7499 100%)",
+  "linear-gradient(-135deg, #E0F0F8 0%, #3D7140 100%)",
+];
 
 export default function Home() {
+  const section1Ref = useRef<HTMLDivElement | null>(null);
+  const section2Ref = useRef<HTMLDivElement | null>(null);
+  const section3Ref = useRef<HTMLDivElement | null>(null);
+  const section4Ref = useRef<HTMLDivElement | null>(null);
+  const section5Ref = useRef<HTMLDivElement | null>(null);
+
+  const sections = [
+    section1Ref,
+    section2Ref,
+    section3Ref,
+    section4Ref,
+    section5Ref,
+  ];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <ScrollProvider />
+      {/* Sloj 100: Navigacija */}
+      <Navbar sections={sections} linkColors={linkColors} />
+
+      {/* Sloj -10: Gradijenti */}
+      <Overlay sections={sections} sectionGradients={sectionGradients} />
+
+      {/* Sloj -5: 3D Model */}
+      <CanvasScene />
+
+      {/* Sloj 10: Skrolujuće sekcije */}
+      <div id="smooth-wrapper" className="relative z-10 w-full overflow-hidden">
+        <div id="smooth-content" className="relative w-full">
+          <HeroSection ref={section1Ref} lastSectionRef={section5Ref} />
+          <Section2 ref={section2Ref} title="DR VITOR SAVKOVIĆ" />
+          <Section3 ref={section3Ref} title="Terapijske Usluge" />
+          <Section4 ref={section4Ref} title="Galerija Radova" />
+          <Section5 ref={section5Ref} title="Kontakt" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+    </>
   );
 }
