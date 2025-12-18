@@ -7,70 +7,68 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { useFrame } from "@react-three/fiber"; // Dodaj ovaj import gore!
 
 gsap.registerPlugin(ScrollTrigger);
 
 function ToothModel({ onReady }: { onReady: () => void }) {
   const meshRef = useRef<THREE.Group>(null!);
+  const scrollRotation = useRef(0); // Koristimo ref da sačuvamo vrednost skrola
   const { scene } = useGLTF("/3d/zub-model.glb");
 
+  // 1. SCROLL LOGIKA (Samo prati skrol i upisuje vrednost u ref)
   useEffect(() => {
-    if (!scene) return;
-
-    // 1. Pivot Fix
-    // const box = new THREE.Box3().setFromObject(scene);
-    // const center = box.getCenter(new THREE.Vector3());
-    // scene.position.sub(center);
-
-    // Starting state - small scale
-    meshRef.current.scale.set(0, 0, 0);
-
-    // 2. Intro animacija sa callback-om
-    gsap.to(meshRef.current.scale, {
-      x: 0.7,
-      y: 0.7,
-      z: 0.7,
-      duration: 1.2,
-      delay: 0.5, // Dajemo overlay-u vremena da se "smiri"
-      ease: "power4.out",
-      onComplete: onReady, // Javljamo sceni da je zub na ekranu
-    });
-
-    // 3. Scroll Rotacija
-    ScrollTrigger.create({
+    const st = ScrollTrigger.create({
       trigger: "#smooth-content",
       start: "top top",
       end: "bottom bottom",
       scrub: 0.5,
       onUpdate: (self) => {
-        if (meshRef.current) {
-          meshRef.current.rotation.y = self.progress * Math.PI * 2;
-        }
+        // Čuvamo progres skrola pomnožen sa 2 PI (pun krug)
+        scrollRotation.current = self.progress * Math.PI * 2;
       },
+    });
+
+    return () => st.kill();
+  }, []);
+
+  // 2. INTRO I RESPONSIVE LOGIKA
+  useEffect(() => {
+    if (!scene) return;
+
+    const isMobile = window.innerWidth < 768;
+
+    // Inicijalna pozicija
+    meshRef.current.position.set(isMobile ? 0 : 1.8, isMobile ? 0 : 0, 0);
+    meshRef.current.scale.set(0, 0, 0);
+
+    // Intro animacija skale
+    gsap.to(meshRef.current.scale, {
+      x: isMobile ? 0.5 : 0.7,
+      y: isMobile ? 0.5 : 0.7,
+      z: isMobile ? 0.5 : 0.7,
+      duration: 1.2,
+      delay: 0.5,
+      ease: "power4.out",
+      onComplete: onReady,
     });
   }, [scene, onReady]);
 
-  return (
-    <group ref={meshRef} position={[1.8, 0, 0]}>
-      {/* Rim Lights */}
-      <spotLight
-        position={[14, 2, -2]}
-        intensity={100}
-        color="#00ffff"
-        distance={20}
-        angle={0.5}
-        penumbra={1}
-      />
-      <spotLight
-        position={[-10, 2, -5]}
-        intensity={100}
-        color="#00ffff"
-        distance={30}
-        angle={0.5}
-        penumbra={1}
-      />
+  // 3. RENDER LOOP (Ovo osigurava da se rotacija uvek dešava)
+  // Koristimo Three.js-ov loop za glatku rotaciju
 
-      <Float speed={2} rotationIntensity={0} floatIntensity={0.5}>
+  useFrame(() => {
+    if (meshRef.current) {
+      // Rotacija = vrednost sa skrola + konstantno lagano okretanje (opciono)
+      meshRef.current.rotation.y = scrollRotation.current;
+    }
+  });
+
+  return (
+    <group ref={meshRef}>
+      <spotLight position={[14, 2, -2]} intensity={100} color="#00ffff" />
+      <spotLight position={[-10, 2, -5]} intensity={100} color="#00ffff" />
+      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5}>
         <primitive object={scene} />
       </Float>
     </group>
