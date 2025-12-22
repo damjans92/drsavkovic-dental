@@ -110,17 +110,17 @@ const Section5 = forwardRef<HTMLDivElement, { title: string }>(
             <div className="contact-card pt-8 border-t border-white/10 flex items-center gap-6">
               <a
                 href="#"
-                className="flex items-center gap-2 text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-cyan-400 transition-all"
+                className="flex items-center gap-2 text-sm uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-cyan-400 transition-all"
               >
                 <Instagram size={16} /> Instagram
               </a>
               <a
                 href="#"
-                className="flex items-center gap-2 text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-cyan-400 transition-all"
+                className="flex items-center gap-2 text-sm uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-cyan-400 transition-all"
               >
                 <Facebook size={16} /> Facebook
               </a>
-              <span className="text-[10px] opacity-20 uppercase tracking-widest italic">
+              <span className="text-sm opacity-20 uppercase tracking-widest italic">
                 © 2025 Dental3D
               </span>
             </div>

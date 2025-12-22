@@ -25,7 +25,6 @@ export default function Navbar({ sections, linkColors }: NavbarProps) {
     );
 
     const setActive = (index: number) => {
-      // Pomeramo index jer "Početna" odgovara sections[0]
       gsap.to(navRef.current, {
         color: linkColors[index] || "#fff",
         duration: 0.3,
@@ -40,7 +39,6 @@ export default function Navbar({ sections, linkColors }: NavbarProps) {
       });
     };
 
-    // ScrollTrigger logika
     sections.forEach((ref, i) => {
       if (!ref.current) return;
       ScrollTrigger.create({
@@ -59,16 +57,14 @@ export default function Navbar({ sections, linkColors }: NavbarProps) {
     };
   }, [sections, linkColors]);
 
-  // Funkcija za skrolovanje (radi i za mobilni i za desktop)
   const handleScroll = (index: number) => {
     const smoother = ScrollSmoother.get();
     if (smoother && sections[index]?.current) {
       smoother.scrollTo(sections[index].current, true, "top top");
-      setIsOpen(false); // Zatvori mobilni meni nakon klika
+      setIsOpen(false);
     }
   };
 
-  // Animacija mobilnog menija
   useEffect(() => {
     if (isOpen) {
       gsap.to(mobileMenuRef.current, { x: 0, duration: 0.6, ease: "expo.out" });
@@ -88,67 +84,70 @@ export default function Navbar({ sections, linkColors }: NavbarProps) {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 z-[100] w-full flex justify-between items-center px-6 md:px-10 py-4 bg-black/10 backdrop-blur-md border-b border-white/10 text-white">
-        {/* LOGO */}
-        <div
-          className="flex-shrink-0 cursor-pointer"
-          onClick={() => handleScroll(0)}
-        >
-          <Image
-            src="/dentalcraft-3d-logo.png"
-            alt="DentalCraft 3D Logo"
-            width={180}
-            height={50}
-            className="invert object-contain md:w-[220px]"
-          />
-        </div>
-
-        {/* DESKTOP LINKOVI (Skriveni na mobilnom) */}
-        <div
-          ref={navRef}
-          className="hidden md:flex items-center gap-6 lg:gap-8 font-medium"
-        >
-          {menuItems.map((label, i) => (
-            <a
-              key={i}
-              href={`#${label.toLowerCase()}`}
-              onClick={(e) => {
-                e.preventDefault();
-                handleScroll(i);
-              }}
-              className="nav-link relative px-2 py-1 uppercase text-[13px] tracking-wider font-semibold transition-colors hover:text-cyan-400"
-            >
-              {label}
-            </a>
-          ))}
-        </div>
-
-        {/* HAMBURGER DUGME (Samo na mobilnom) */}
-        <button
-          className="md:hidden z-[110] p-2"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <div className="w-6 h-5 flex flex-col justify-between">
-            <span
-              className={`w-full h-[2px] bg-white transition-all ${
-                isOpen ? "rotate-45 translate-y-2" : ""
-              }`}
-            />
-            <span
-              className={`w-full h-[2px] bg-white transition-all ${
-                isOpen ? "opacity-0" : ""
-              }`}
-            />
-            <span
-              className={`w-full h-[2px] bg-white transition-all ${
-                isOpen ? "-rotate-45 -translate-y-2" : ""
-              }`}
+      <nav className="fixed top-0 left-0 z-[100] w-full flex justify-center px-6 md:px-10 py-4 bg-black/10 backdrop-blur-md border-b border-white/10 text-white">
+        {/* UZAK CONTAINER */}
+        <div className="w-full container mx-auto  flex justify-between items-center">
+          {/* LOGO */}
+          <div
+            className="flex-shrink-0 cursor-pointer"
+            onClick={() => handleScroll(0)}
+          >
+            <Image
+              src="/dentalcraft-3d-logo.png"
+              alt="DentalCraft 3D Logo"
+              width={180}
+              height={50}
+              className="invert object-contain md:w-[220px]"
             />
           </div>
-        </button>
+
+          {/* DESKTOP LINKOVI */}
+          <div
+            ref={navRef}
+            className="hidden md:flex items-center gap-6 lg:gap-8 font-medium"
+          >
+            {menuItems.map((label, i) => (
+              <a
+                key={i}
+                href={`#${label.toLowerCase()}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleScroll(i);
+                }}
+                className="nav-link relative px-2 py-1 uppercase text-md tracking-wider font-semibold transition-colors hover:text-cyan-400"
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+
+          {/* HAMBURGER */}
+          <button
+            className="md:hidden z-[110] p-2"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <div className="w-6 h-5 flex flex-col justify-between">
+              <span
+                className={`w-full h-[2px] bg-white transition-all ${
+                  isOpen ? "rotate-45 translate-y-2" : ""
+                }`}
+              />
+              <span
+                className={`w-full h-[2px] bg-white transition-all ${
+                  isOpen ? "opacity-0" : ""
+                }`}
+              />
+              <span
+                className={`w-full h-[2px] bg-white transition-all ${
+                  isOpen ? "-rotate-45 -translate-y-2" : ""
+                }`}
+              />
+            </div>
+          </button>
+        </div>
       </nav>
 
-      {/* MOBILNI MENU OVERLAY */}
+      {/* MOBILNI MENU */}
       <div
         ref={mobileMenuRef}
         className="fixed inset-0 z-[105] bg-black/95 backdrop-blur-xl translate-x-full md:hidden flex flex-col items-center justify-center gap-8"
