@@ -15,7 +15,7 @@ export default function Navbar({ sections, linkColors }: NavbarProps) {
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const menuItems = ["Početna", "O nama", "Usluge", "Galerija", "Kontakt"];
+  const menuItems = ["Home", "About", "Solutions", "Gallery", "Contact"];
 
   useEffect(() => {
     if (!navRef.current) return;
@@ -95,8 +95,8 @@ export default function Navbar({ sections, linkColors }: NavbarProps) {
           onClick={() => handleScroll(0)}
         >
           <Image
-            src="/dr-savkovic-dental-logo.svg"
-            alt="Dr Savkovic Logo"
+            src="/dentalcraft-3d-logo.png"
+            alt="DentalCraft 3D Logo"
             width={180}
             height={50}
             className="invert object-contain md:w-[220px]"

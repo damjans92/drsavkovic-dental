@@ -51,10 +51,10 @@ export default function Home() {
       <div id="smooth-wrapper" className="relative z-10 w-full overflow-hidden">
         <div id="smooth-content" className="relative w-full">
           <HeroSection ref={section1Ref} lastSectionRef={section5Ref} />
-          <Section2 ref={section2Ref} title="DR VITOR SAVKOVIĆ" />
-          <Section3 ref={section3Ref} title="Terapijske Usluge" />
+          <Section2 ref={section2Ref} title="DENTAL FABRICATION" />
+          <Section3 ref={section3Ref} title="3D Dental Solutions" />
           <Section4 ref={section4Ref} title="Galerija Radova" />
-          <Section5 ref={section5Ref} title="Kontakt" />
+          <Section5 ref={section5Ref} title="Contact" />
         </div>
       </div>
     </>
